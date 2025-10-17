@@ -1,0 +1,324 @@
+{\rtf1\ansi\ansicpg936\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Dengue AI Chatbot (V1 - Loss Frame, Revised)</title>\
+    <style>\
+        /* --- \uc0\u20840 \u23616 \u21644 \u36890 \u29992 \u26679 \u24335  --- */\
+        body \{ \
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; \
+            background-color: #f0f2f5; \
+            color: #000000; \
+            margin: 0; \
+            padding: 20px; \
+            box-sizing: border-box;\
+            display: flex;\
+            justify-content: center;\
+            align-items: center;\
+            min-height: 100vh;\
+        \}\
+\
+        .app-wrapper \{\
+            width: 100%;\
+            max-width: 500px;\
+        \}\
+\
+        /* --- \uc0\u20171 \u32461 \u38754 \u26495 \u26679 \u24335  --- */\
+        .intro-container \{\
+            background-color: #ffffff;\
+            border: 1px solid #dbdbdb;\
+            border-radius: 20px;\
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);\
+            padding: 20px 25px;\
+            margin-bottom: 20px;\
+            box-sizing: border-box;\
+        \}\
+\
+        .intro-header \{\
+            display: flex;\
+            justify-content: space-between;\
+            align-items: center;\
+            margin-bottom: 20px;\
+        \}\
+\
+        .intro-header h1 \{\
+            font-size: 1.5em;\
+            margin: 0;\
+        \}\
+\
+        #toggle-intro-btn \{\
+            background: none;\
+            border: 1px solid #000;\
+            border-radius: 8px;\
+            padding: 5px 12px;\
+            font-size: 0.9em;\
+            font-weight: 600;\
+            cursor: pointer;\
+            transition: background-color 0.2s, color 0.2s;\
+        \}\
+        #toggle-intro-btn:hover \{\
+            background-color: #000;\
+            color: #fff;\
+        \}\
+\
+        #intro-content \{\
+            max-height: 1000px; /* \uc0\u36275 \u22815 \u22823 \u30340 \u39640 \u24230 \u20197 \u26174 \u31034 \u20869 \u23481  */\
+            overflow: hidden;\
+            transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;\
+            opacity: 1;\
+        \}\
+\
+        #intro-content.collapsed \{\
+            max-height: 0;\
+            opacity: 0;\
+            margin-top: -20px; /* \uc0\u24179 \u28369 \u22320 \u31227 \u38500 header\u30340 margin-bottom */\
+        \}\
+        \
+        .intro-section \{\
+            display: flex;\
+            align-items: flex-start;\
+            margin-bottom: 20px;\
+        \}\
+        .intro-section:last-child \{\
+            margin-bottom: 0;\
+        \}\
+\
+        .intro-icon \{\
+            flex-shrink: 0;\
+            margin-right: 15px;\
+            width: 32px;\
+            height: 32px;\
+            margin-top: 3px;\
+        \}\
+        .intro-icon svg \{\
+            width: 100%;\
+            height: 100%;\
+            fill: #000000;\
+        \}\
+\
+        .intro-text h2 \{\
+            margin: 0 0 5px 0;\
+            font-size: 1.1em;\
+        \}\
+        .intro-text p \{\
+            margin: 0;\
+            line-height: 1.5;\
+            color: #555;\
+            font-size: 0.95em;\
+        \}\
+\
+        /* --- \uc0\u32842 \u22825 \u39029 \u38754 \u26679 \u24335  --- */\
+        .chat-container \{ \
+            width: 100%; \
+            height: 80vh; max-height: 700px; \
+            background-color: #ffffff; border: 1px solid #dbdbdb; border-radius: 20px; \
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); display: flex; flex-direction: column; overflow: hidden; \
+        \}\
+        .chat-header \{ background-color: #ffffff; color: #000000; padding: 15px 20px; text-align: center; font-size: 1.1em; font-weight: 600; flex-shrink: 0; border-bottom: 1px solid #efefef; \}\
+        .chat-messages \{ flex-grow: 1; padding: 20px 10px; overflow-y: auto; display: flex; flex-direction: column; \}\
+        .message \{ display: flex; align-items: flex-end; margin-bottom: 15px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; \}\
+        .message.visible \{ opacity: 1; transform: translateY(0); \}\
+        .avatar \{ width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; flex-shrink: 0; \}\
+        .avatar-ai \{ background-color: #efefef; margin-right: 10px; \}\
+        .avatar-ai svg \{ width: 24px; height: 24px; fill: #000000; \}\
+        .avatar-user \{ background-color: #000000; color: #ffffff; margin-left: 10px; \}\
+        .bubble \{ max-width: 75%; padding: 12px 18px; border-radius: 20px; line-height: 1.5; word-wrap: break-word; \}\
+        .bubble-ai \{ background-color: #efefef; color: #000000; border-top-left-radius: 5px; \}\
+        .bubble-user \{ background-color: #000000; color: #ffffff; border-top-right-radius: 5px; \}\
+        .message-ai \{ justify-content: flex-start; \}\
+        .message-user \{ justify-content: flex-end; \}\
+        \
+        .typing-indicator span \{ height: 8px; width: 8px; background-color: #8e8e8e; border-radius: 50%; display: inline-block; margin: 0 2px; animation: bounce 1.4s infinite ease-in-out both; \}\
+        .typing-indicator span:nth-child(1) \{ animation-delay: -0.32s; \}\
+        .typing-indicator span:nth-child(2) \{ animation-delay: -0.16s; \}\
+        @keyframes bounce \{ 0%, 80%, 100% \{ transform: scale(0); \} 40% \{ transform: scale(1.0); \} \}\
+        .chat-input-area \{ flex-shrink: 0; padding: 10px 15px; background-color: #ffffff; border-top: 1px solid #efefef; display: flex; align-items: center; transition: opacity 0.3s ease; \}\
+        .chat-input-area.hidden \{ opacity: 0; pointer-events: none; \}\
+        #user-reply-text \{ flex-grow: 1; margin: 0; padding: 10px 15px; background-color: #ffffff; border: 1px solid #dbdbdb; border-radius: 20px; color: #8e8e8e; font-style: italic; \}\
+        #send-btn \{ background: none; border: none; margin-left: 10px; cursor: pointer; padding: 5px; \}\
+        #send-btn svg \{ width: 28px; height: 28px; fill: #000000; \}\
+        #send-btn:disabled svg \{ fill: #b5b5b5; \}\
+    </style>\
+</head>\
+<body>\
+\
+    <div class="app-wrapper">\
+        <!-- \uc0\u20171 \u32461 \u38754 \u26495  (\u20869 \u23481 \u20445 \u25345 \u19981 \u21464 ) -->\
+        <div class="intro-container">\
+            <div class="intro-header">\
+                <h1>About the AI</h1>\
+                <button id="toggle-intro-btn">Hide</button>\
+            </div>\
+            <div id="intro-content">\
+                <div class="intro-section">\
+                    <div class="intro-icon">\
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 3h6.2c-.2.35-.43.69-.68 1H13v-1zm0 3h4.93c-.87.48-1.84.8-2.87.93V16z"></path></svg>\
+                    </div>\
+                    <div class="intro-text">\
+                        <h2>Intelligent Core</h2>\
+                        <p>The AI chatbot you are about to interact with is built on an ensemble machine learning model that combines several specialized algorithms working together using data from the National Environment Agency (NEA). Using deep learning, each algorithm focuses on different factors. This design allows the system to generate highly reliable predictions by combining diverse analytical approaches.</p>\
+                    </div>\
+                </div>\
+                <div class="intro-section">\
+                    <div class="intro-icon">\
+                        <svg viewBox="0 0 24 24"><path d="M12 6v3l4 4-1.41 1.41L11 10.83V6h1zm10-2h-3V1h-2v3H7V1H5v3H2v18h20V4zm-2 16H4V9h16v11z"></path></svg>\
+                    </div>\
+                    <div class="intro-text">\
+                        <h2>Adaptive Data</h2>\
+                        <p>The system dynamically evaluates its algorithms by checking their past forecasts against recent real-world dengue case numbers. Algorithms that have been most accurate are given greater influence, while less accurate ones are adjusted. This adaptive weighting process ensures the model continuously improves, keeping its predictions precise and relevant as new dengue data becomes available.</p>\
+                    </div>\
+                </div>\
+                <div class="intro-section">\
+                    <div class="intro-icon">\
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path></svg>\
+                    </div>\
+                    <div class="intro-text">\
+                        <h2>Reliable Outcomes</h2>\
+                        <p>When the model\'92s aggregated risk score passes a statistical threshold, it produces a clear dengue risk classification for your area. The conclusion is evidence-based, relying on the most accurate and up-to-date analysis currently available. By drawing on proven methods, the chatbot delivers a scientifically grounded assessment that reflects the true danger posed by dengue in your neighborhood.</p>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+\
+        <!-- \uc0\u32842 \u22825 \u26426 \u22120 \u20154  -->\
+        <div class="chat-container">\
+            <div class="chat-header">Dengue AI Chatbot</div>\
+            <div class="chat-messages" id="chat-messages"></div>\
+            <div class="chat-input-area hidden" id="input-area">\
+                <p id="user-reply-text"></p>\
+                <button id="send-btn" title="Send">\
+                    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>\
+                </button>\
+            </div>\
+        </div>\
+    </div>\
+\
+    <script>\
+        document.addEventListener('DOMContentLoaded', function() \{\
+            \
+            const toggleBtn = document.getElementById('toggle-intro-btn');\
+            const introContent = document.getElementById('intro-content');\
+            toggleBtn.addEventListener('click', () => \{\
+                const isCollapsed = introContent.classList.toggle('collapsed');\
+                toggleBtn.textContent = isCollapsed ? 'Show' : 'Hide';\
+            \});\
+\
+            // --- \uc0\u32842 \u22825 \u26426 \u22120 \u20154 \u36923 \u36753  (Turn 7 \u26356 \u26032 \u20026 4\u26465 \u28040 \u24687 ) ---\
+            const conversation = [\
+                // Turns 1-6 (\uc0\u20445 \u25345 \u19981 \u21464 )\
+                \{ sender: 'ai', text: 'Hello! I am the NEA Dengue Prevention Chatbot. Ready to check your neighborhood\'92s dengue risk?', delay: 1500 \},\
+                \{ sender: 'user', text: 'Yes, I\'92ve been worried about dengue cases near my place.', delay: 500 \},\
+                \{ sender: 'ai', text: 'My deep learning model, which combines several specialized predictive algorithms, has analyzed the latest data from government with my attention mechanism.', delay: 2800 \},\
+                \{ sender: 'ai', text: 'By assigning disproportionately high importance to these key moments, the model constructs a focused representation of the underlying risk.', delay: 3000 \},\
+                \{ sender: 'ai', text: 'This weighted representation is what allows the model to determine with high confidence that your neighborhood is rapidly developing into a high-risk dengue cluster, so I recommend acting immediately.', delay: 3500 \},\
+                \{ sender: 'user', text: 'Oh no, that sounds serious! What should I do?', delay: 500 \},\
+                \{ sender: 'ai', text: 'Of course, please listen carefully.', delay: 1500 \},\
+                \{ sender: 'ai', text: 'First, use mosquito repellent devices inside your home, like electric repellents or coils. Many people don\'92t realize mosquitoes can hide indoors and bite during the day, especially when you\'92re resting or doing chores.', delay: 3000 \},\
+                \{ sender: 'ai', text: 'Second, clear away your rubbish around the house, even things like old plastic cups or containers. Rainwater, or leftover water inside, can collect inside these items, turning them into hidden mosquito breeding sites.', delay: 3000 \},\
+                \{ sender: 'ai', text: 'If you stay consistent, dengue won\'92t stand a chance!', delay: 2000 \},\
+                \{ sender: 'user', text: 'Got it. I\'92ll make sure to follow your advice.', delay: 500 \},\
+                \
+                // --- \uc0\u26356 \u26032 : (\u26032 \u30340  "Loss Frame" \u25991 \u26412 , \u37325 \u26032 \u32452 \u21512 \u20026 4\u26465 \u28040 \u24687 ) ---\
+                \{ sender: 'ai', text: 'Dengue fever is no joke. It can cause intense joint and muscle pain, high fever, and in severe cases, hospitalization or even death.', delay: 3500 \},\
+                \{ sender: 'ai', text: 'This isn\'92t just a number you see in the news. The elderly and children are especially at high risk.', delay: 3000 \},\
+                \{ sender: 'ai', text: 'Don\'92t wait until it\'92s too late. Check your home now to keep your family safe!', delay: 3000 \},\
+                \{ sender: 'ai', text: 'Thanks for chatting with me! I\'92ve prepared a closing image you can view on the next page.', delay: 3000 \}\
+            ];\
+\
+            const chatMessagesContainer = document.getElementById('chat-messages');\
+            const inputArea = document.getElementById('input-area');\
+            const userReplyText = document.getElementById('user-reply-text');\
+            const sendBtn = document.getElementById('send-btn');\
+            let currentStep = 0;\
+            const TYPING_DELAY = 1200;\
+            const aiAvatarSVG = `<svg viewBox="0 0 24 24"><path d="M19 11h-1.7c0-3.35-2.28-6.24-5.3-7.43V2h-2v1.57C6.98 4.76 4.7 7.65 4.7 11H3v2h1.7c.33 3.41 3.12 6.11 6.53 6.43V22h2v-2.57c3.41-.32 6.2-3.02 6.53-6.43H21v-2zM8 11c0-2.21 1.79-4 4-4s4 1.79 4 4H8z"></path></svg>`;\
+\
+            function processNextStep() \{\
+                if (currentStep >= conversation.length) \{\
+                    inputArea.classList.add('hidden');\
+                    return;\
+                \}\
+                const currentMessage = conversation[currentStep];\
+                if (currentMessage.sender === 'ai') \{\
+                    sendBtn.disabled = true;\
+                    showTypingIndicator();\
+                    setTimeout(() => \{\
+                        hideTypingIndicator();\
+                        displayMessage(currentMessage);\
+                        currentStep++;\
+                        setTimeout(processNextStep, currentMessage.delay);\
+                    \}, TYPING_DELAY);\
+                \} else \{\
+                    prepareUserTurn();\
+                \}\
+            \}\
+\
+            function prepareUserTurn() \{\
+                if (currentStep >= conversation.length) return;\
+                const userMessage = conversation[currentStep];\
+                userReplyText.textContent = userMessage.text;\
+                inputArea.classList.remove('hidden');\
+                sendBtn.disabled = false;\
+            \}\
+\
+            sendBtn.addEventListener('click', () => \{\
+                if (currentStep >= conversation.length || conversation[currentStep].sender !== 'user') return;\
+                const userMessage = conversation[currentStep];\
+                displayMessage(userMessage);\
+                currentStep++;\
+                inputArea.classList.add('hidden');\
+                sendBtn.disabled = true;\
+                setTimeout(processNextStep, userMessage.delay);\
+            \});\
+\
+            function displayMessage(messageObject) \{\
+                const \{ sender, text \} = messageObject;\
+                const messageDiv = document.createElement('div');\
+                const isAI = sender === 'ai';\
+                messageDiv.className = `message $\{isAI ? 'message-ai' : 'message-user'\}`;\
+                const avatarContent = isAI ? aiAvatarSVG : 'U';\
+                const avatarClass = isAI ? 'avatar-ai' : 'avatar-user';\
+                const bubbleClass = isAI ? 'bubble-ai' : 'bubble-user';\
+                const bubbleContent = text;\
+\
+                if (isAI) \{\
+                    messageDiv.innerHTML = `<div class="avatar $\{avatarClass\}">$\{avatarContent\}</div><div class="bubble $\{bubbleClass\}">$\{bubbleContent\}</div>`;\
+                \} else \{\
+                    messageDiv.innerHTML = `<div class="bubble $\{bubbleClass\}">$\{bubbleContent\}</div><div class="avatar $\{avatarClass\}">$\{avatarContent\}</div>`;\
+                \}\
+                \
+                chatMessagesContainer.appendChild(messageDiv);\
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;\
+                setTimeout(() => messageDiv.classList.add('visible'), 50);\
+            \}\
+\
+            function showTypingIndicator() \{\
+                const typingDiv = document.createElement('div');\
+                typingDiv.id = 'typing-indicator';\
+                typingDiv.className = 'message message-ai';\
+                typingDiv.innerHTML = `<div class="avatar avatar-ai">$\{aiAvatarSVG\}</div><div class="bubble bubble-ai"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;\
+                chatMessagesContainer.appendChild(typingDiv);\
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;\
+            \}\
+\
+            function hideTypingIndicator() \{\
+                const typingIndicator = document.getElementById('typing-indicator');\
+                if (typingIndicator) typingIndicator.remove();\
+            \}\
+\
+            // \uc0\u39029 \u38754 \u21152 \u36733 \u21518 \u30452 \u25509 \u24320 \u22987 \u23545 \u35805 \
+            processNextStep();\
+        \});\
+    </script>\
+\
+</body>\
+</html>\
+}
